@@ -1,153 +1,148 @@
 "use client";
 
-import { Service } from "@/types/appointments";
-import { MOCK_SERVICES } from "@/data/mockAppointments";
-import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { useState } from "react";
+import { MOCK_SERVICES, MOCK_NOTIFICATION_PHONES } from "@/data/mockAppointments";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import {
-  Edit,
-  Trash2,
-  PlusCircle,
-  DollarSign,
-  Clock
-} from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Edit, Info, Phone, Trash2 } from "lucide-react";
+import { Service, NotificationPhone } from "@/types/appointments";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 
-interface ServiceFormData {
-  name: string;
-  description: string;
-  duration: string;
-  price: number;
-}
-
-const ServicesManager = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
-  const [formData, setFormData] = useState<ServiceFormData>({
+export default function ServicesManager() {
+  const [services, setServices] = useState(MOCK_SERVICES.map(service => ({
+    ...service,
+    notificationPhones: service.notificationPhones || []
+  })));
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
     name: "",
     description: "",
-    duration: "01:00",
+    duration: "",
     price: 0,
+    notificationPhones: [] as number[]
   });
-  const { toast } = useToast();
+  const [availablePhones] = useState(MOCK_NOTIFICATION_PHONES);
 
-  useEffect(() => {
-    // In a real application, this would fetch from an API
-    setServices(MOCK_SERVICES);
-  }, []);
-
-  const handleAddService = () => {
-    const newService: Service = {
-      idServices: services.length > 0 ? Math.max(...services.map(s => s.idServices)) + 1 : 1,
-      uuidServices: crypto.randomUUID(),
-      name: formData.name,
-      description: formData.description,
-      duration: formData.duration,
-      price: formData.price,
-    };
-
-    setServices([...services, newService]);
-    setIsAddDialogOpen(false);
-    resetForm();
-
-    toast({
-      title: "Service added",
-      description: `The service "${formData.name}" has been added successfully.`,
-    });
-  };
-
-  const handleEditService = () => {
-    if (!selectedService) return;
-
-    const updatedServices = services.map(service =>
-      service.idServices === selectedService.idServices
-        ? {
-            ...service,
-            name: formData.name,
-            description: formData.description,
-            duration: formData.duration,
-            price: formData.price,
-          }
-        : service
-    );
-
-    setServices(updatedServices);
-    setIsEditDialogOpen(false);
-
-    toast({
-      title: "Service updated",
-      description: `The service "${formData.name}" has been updated successfully.`,
-    });
-  };
-
-  const handleDeleteService = (id: number) => {
-    setServices(services.filter(service => service.idServices !== id));
-
-    toast({
-      title: "Service deleted",
-      description: "The service has been deleted successfully.",
-      variant: "destructive",
-    });
-  };
-
-  const openEditDialog = (service: Service) => {
-    setSelectedService(service);
+  const handleEditClick = (service: Service) => {
+    setEditingService(service);
     setFormData({
       name: service.name,
       description: service.description,
       duration: service.duration,
       price: service.price,
+      notificationPhones: service.notificationPhones || []
     });
-    setIsEditDialogOpen(true);
+    setIsDialogOpen(true);
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setServices(services.filter(service => service.idServices !== id));
+  };
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === "price" ? parseFloat(value) || 0 : value
+    }));
+  };
+
+  const togglePhone = (phoneId: number) => {
+    setFormData(prev => {
+      const currentPhones = [...prev.notificationPhones];
+      if (currentPhones.includes(phoneId)) {
+        return {
+          ...prev,
+          notificationPhones: currentPhones.filter(id => id !== phoneId)
+        };
+      } else {
+        return {
+          ...prev,
+          notificationPhones: [...currentPhones, phoneId]
+        };
+      }
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (editingService) {
+      // Update existing service
+      setServices(services.map(service =>
+        service.idServices === editingService.idServices
+          ? { ...service, ...formData }
+          : service
+      ));
+    } else {
+      // Add new service
+      const newId = Math.max(...services.map(s => s.idServices)) + 1;
+      setServices([
+        ...services,
+        {
+          idServices: newId,
+          uuidServices: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
+          ...formData
+        }
+      ]);
+    }
+
+    setIsDialogOpen(false);
+    setEditingService(null);
+    resetForm();
   };
 
   const resetForm = () => {
     setFormData({
       name: "",
       description: "",
-      duration: "01:00",
+      duration: "",
       price: 0,
+      notificationPhones: []
     });
-    setSelectedService(null);
+  };
+
+  const handleAddNewClick = () => {
+    setEditingService(null);
+    resetForm();
+    setIsDialogOpen(true);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(price);
+  };
+
+  const getPhonesByService = (serviceId: number) => {
+    const service = services.find(s => s.idServices === serviceId);
+    if (!service || !service.notificationPhones || service.notificationPhones.length === 0) {
+      return "No notifications configured";
+    }
+
+    return service.notificationPhones.map(phoneId => {
+      const phone = availablePhones.find(p => p.id === phoneId);
+      return phone ? phone.label : "";
+    }).join(", ");
   };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm">
-          Total services: <strong>{services.length}</strong>
-        </span>
+      <div className="flex justify-end">
         <Button
-          size="sm"
-          className="flex items-center gap-2"
-          onClick={() => {
-            resetForm();
-            setIsAddDialogOpen(true);
-          }}
+          onClick={handleAddNewClick}
+          className="hidden sm:flex" // Hide this button on mobile as it's duplicated in the main page
         >
-          <PlusCircle className="h-4 w-4" />
-          <span>Add Service</span>
+          Add New Service
         </Button>
       </div>
 
@@ -155,56 +150,77 @@ const ServicesManager = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[50px]">ID</TableHead>
-              <TableHead>Name</TableHead>
+              <TableHead>Service Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Duration</TableHead>
               <TableHead>Price</TableHead>
+              <TableHead>Notifications</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {services.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
                   No services found
                 </TableCell>
               </TableRow>
             ) : (
               services.map((service) => (
                 <TableRow key={service.idServices}>
-                  <TableCell>{service.idServices}</TableCell>
                   <TableCell className="font-medium">{service.name}</TableCell>
                   <TableCell>{service.description}</TableCell>
+                  <TableCell>{service.duration}</TableCell>
+                  <TableCell>{formatPrice(service.price)}</TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3 text-muted-foreground" />
-                      {service.duration}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <DollarSign className="h-3 w-3 text-muted-foreground" />
-                      {service.price.toFixed(2)}
+                    <div className="flex items-center">
+                      <span className="mr-2">{service.notificationPhones?.length || 0} contacts</span>
+                      {service.notificationPhones && service.notificationPhones.length > 0 && (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Info className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-80">
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Notification Contacts</h4>
+                              <ul className="text-sm">
+                                {service.notificationPhones.map(phoneId => {
+                                  const phone = availablePhones.find(p => p.id === phoneId);
+                                  return phone ? (
+                                    <li key={phone.id} className="flex items-center py-1">
+                                      <Phone className="h-3 w-3 mr-2 text-muted-foreground" />
+                                      <span className="font-medium">{phone.label}:</span>
+                                      <span className="ml-1">{phone.phoneNumber}</span>
+                                    </li>
+                                  ) : null;
+                                })}
+                              </ul>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => openEditDialog(service)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteService(service.idServices)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditClick(service)}
+                    >
+                      <Edit className="h-4 w-4" />
+                      <span className="sr-only">Edit</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-destructive"
+                      onClick={() => handleDeleteClick(service.idServices)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Delete</span>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))
@@ -213,149 +229,126 @@ const ServicesManager = () => {
         </Table>
       </div>
 
-      {/* Add Service Dialog */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
+      {/* Add/Edit Service Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Add New Service</DialogTitle>
+            <DialogTitle>{editingService ? "Edit Service" : "Add New Service"}</DialogTitle>
             <DialogDescription>
-              Create a new service for appointments
+              {editingService
+                ? "Update the service details below."
+                : "Fill out the form below to add a new service."}
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="text-right">
-                Description
-              </Label>
-              <Input
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="duration" className="text-right">
-                Duration (HH:MM)
-              </Label>
-              <Input
-                id="duration"
-                value={formData.duration}
-                onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                placeholder="01:00"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="price" className="text-right">
-                Price
-              </Label>
-              <div className="col-span-3 relative">
-                <DollarSign className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <form onSubmit={handleSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleFormChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">
+                  Description
+                </Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleFormChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="duration" className="text-right">
+                  Duration (HH:MM)
+                </Label>
+                <Input
+                  id="duration"
+                  name="duration"
+                  value={formData.duration}
+                  onChange={handleFormChange}
+                  placeholder="01:30"
+                  className="col-span-3"
+                  required
+                  pattern="[0-9]{2}:[0-9]{2}"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="price" className="text-right">
+                  Price ($)
+                </Label>
                 <Input
                   id="price"
+                  name="price"
                   type="number"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-                  className="pl-8"
                   step="0.01"
                   min="0"
+                  value={formData.price}
+                  onChange={handleFormChange}
+                  className="col-span-3"
+                  required
                 />
               </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleAddService}>Add Service</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
-      {/* Edit Service Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Edit Service</DialogTitle>
-            <DialogDescription>
-              Update the service details
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-description" className="text-right">
-                Description
-              </Label>
-              <Input
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-duration" className="text-right">
-                Duration (HH:MM)
-              </Label>
-              <Input
-                id="edit-duration"
-                value={formData.duration}
-                onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                placeholder="01:00"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="edit-price" className="text-right">
-                Price
-              </Label>
-              <div className="col-span-3 relative">
-                <DollarSign className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="edit-price"
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-                  className="pl-8"
-                  step="0.01"
-                  min="0"
-                />
+              <div className="grid grid-cols-4 items-start gap-4">
+                <Label className="text-right pt-2">
+                  Notification Contacts
+                </Label>
+                <div className="col-span-3">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Select who should be notified when this service is booked
+                  </p>
+                  {availablePhones.length === 0 ? (
+                    <div className="text-sm text-muted-foreground">
+                      No phone numbers configured. Add some in the Notifications tab.
+                    </div>
+                  ) : (
+                    <ScrollArea className="h-[150px] rounded-md border p-2">
+                      <div className="space-y-2">
+                        {availablePhones.map(phone => (
+                          <div key={phone.id} className="flex items-start space-x-2">
+                            <Checkbox
+                              id={`phone-${phone.id}`}
+                              checked={formData.notificationPhones.includes(phone.id)}
+                              onCheckedChange={() => togglePhone(phone.id)}
+                            />
+                            <div className="grid gap-1.5 leading-none">
+                              <Label htmlFor={`phone-${phone.id}`} className="text-base">
+                                {phone.label}
+                              </Label>
+                              <p className="text-sm text-muted-foreground">
+                                {phone.phoneNumber}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleEditService}>Save Changes</Button>
-          </DialogFooter>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                {editingService ? "Save Changes" : "Add Service"}
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
   );
-};
-
-export default ServicesManager;
+}

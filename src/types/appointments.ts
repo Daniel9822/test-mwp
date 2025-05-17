@@ -13,6 +13,7 @@ export interface Service {
   description: string;
   duration: string;
   price: number;
+  notificationPhones?: number[]; // IDs de los teléfonos para notificaciones
 }
 
 export interface Appointment {

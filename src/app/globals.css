@@ -5,59 +5,63 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 262 83% 58%;        /* Púrpura vibrante */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 186 83% 45%;      /* Turquesa vibrante */
+    --secondary-foreground: 240 10% 3.9%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 330 81% 60%;         /* Rosa vivo */
+    --accent-foreground: 240 10% 3.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 262 83% 58%;
+    --radius: 0.75rem;             /* Bordes más redondeados para un look más elegante */
+    --chart-1: 262 83% 58%;
+    --chart-2: 186 83% 45%;
+    --chart-3: 330 81% 60%;
+    --chart-4: 43 96% 56%;        /* Amarillo vibrante */
+    --chart-5: 152 76% 44%;       /* Verde esmeralda */
+    --positive: 142 76% 45%;
+    --negative: 0 84% 60%;
+    --success: 142 76% 45%;      /* Color para éxito/positivo */
   }
 
   .dark {
-    --background: 225 15% 14%;
-    --foreground: 210 40% 98%;
-    --card: 228 14% 16%;
-    --card-foreground: 210 40% 98%;
-    --popover: 228 14% 16%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 223 14% 25%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 220 70% 50%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 227 14% 20%;
-    --input: 227 14% 20%;
-    --ring: 224.3 76.3% 48%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 280 55% 65%;
-    --chart-4: 0 80% 64%;
-    --chart-5: 120 60% 55%;
-    --positive: 142 69% 54%;
-    --negative: 0 84% 60%;
+    --background: 240 10% 8%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 262 83% 68%;        /* Púrpura más brillante en dark mode */
+    --primary-foreground: 0 0% 12%;
+    --secondary: 186 83% 55%;      /* Turquesa más brillante en dark mode */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 8% 18%;
+    --muted-foreground: 240 5% 80%;
+    --accent: 330 81% 70%;         /* Rosa más brillante en dark mode */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 8% 18%;
+    --input: 240 8% 18%;
+    --ring: 262 83% 68%;
+    --chart-1: 262 83% 68%;
+    --chart-2: 186 83% 55%;
+    --chart-3: 330 81% 70%;
+    --chart-4: 43 96% 66%;
+    --chart-5: 152 76% 54%;
+    --positive: 142 76% 55%;
+    --negative: 0 84% 65%;
+    --success: 142 76% 55%;      /* Color para éxito/positivo */
   }
 }
 
@@ -76,7 +80,7 @@
   }
 
   .sidebar-item.active {
-    @apply bg-muted text-foreground;
+    @apply bg-primary/10 text-primary;
   }
 
   .sidebar-category {
@@ -84,18 +88,22 @@
   }
 
   .stat-card {
-    @apply flex items-start gap-4 p-4;
+    @apply flex items-start gap-4 p-6 rounded-xl shadow-sm border border-border/50;
   }
 
   .stat-card-icon {
-    @apply p-3 rounded-full text-white;
+    @apply p-3 rounded-full text-white shadow-md;
   }
 
   .percent-up {
-    @apply text-positive flex items-center gap-1 text-sm;
+    @apply text-success flex items-center gap-1 text-sm;
   }
 
   .percent-down {
-    @apply text-negative flex items-center gap-1 text-sm;
+    @apply text-destructive flex items-center gap-1 text-sm;
+  }
+
+  .text-success {
+    color: hsl(var(--success));
   }
 }

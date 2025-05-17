@@ -1,155 +1,104 @@
 "use client";
 
-import { Appointment, AppointmentStatus } from "@/types/appointments";
-import { MOCK_APPOINTMENTS } from "@/data/mockAppointments";
 import { useState, useEffect } from "react";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { format, parse } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { MOCK_APPOINTMENTS } from "@/data/mockAppointments";
+import { Card, CardContent } from "@/components/ui/card";
+import { format, isSameDay } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import { AppointmentStatus } from "@/types/appointments";
 import AppointmentDialog from "./AppointmentDialog";
-import { useToast } from "@/components/ui/use-toast";
 
-interface CalendarEvent {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
-  extendedProps: {
-    appointment: Appointment;
-  };
-  backgroundColor: string;
-  borderColor: string;
-}
+export default function AppointmentCalendar() {
+  const [date, setDate] = useState<Date>(new Date());
+  const [selectedAppointment, setSelectedAppointment] = useState<number | null>(null);
+  const [appointmentsForDate, setAppointmentsForDate] = useState<typeof MOCK_APPOINTMENTS>([]);
 
-const getStatusColor = (status: AppointmentStatus) => {
-  switch (status) {
-    case AppointmentStatus.Scheduled:
-      return "#3b82f6"; // blue
-    case AppointmentStatus.Completed:
-      return "#10b981"; // green
-    case AppointmentStatus.Cancelled:
-      return "#ef4444"; // red
-    case AppointmentStatus.NoShow:
-      return "#f59e0b"; // amber
-    case AppointmentStatus.InProgress:
-      return "#8b5cf6"; // purple
-    default:
-      return "#6b7280"; // gray
-  }
-};
-
-const AppointmentCalendar = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { toast } = useToast();
-
+  // Usar useEffect para evitar errores de hidratación
   useEffect(() => {
-    // In a real application, this would fetch from an API
-    setAppointments(MOCK_APPOINTMENTS);
-  }, []);
+    // Filtrar y ordenar las citas para la fecha seleccionada
+    const filtered = MOCK_APPOINTMENTS.filter(appointment =>
+      isSameDay(new Date(appointment.appointmentDate), date)
+    ).sort((a, b) => a.appointmentTime.localeCompare(b.appointmentTime));
 
-  useEffect(() => {
-    if (appointments.length === 0) return;
+    setAppointmentsForDate(filtered);
+  }, [date]);
 
-    const newEvents = appointments.map((appointment) => {
-      // Parse the time from HH:MM format
-      const time = appointment.appointmentTime;
-      const [hours, minutes] = time.split(":").map(Number);
-
-      // Create the start date by combining the date and time
-      const startDate = new Date(appointment.appointmentDate);
-      startDate.setHours(hours, minutes);
-
-      // Parse the duration from HH:MM format
-      const duration = appointment.["Service.duration"];
-      const [durationHours, durationMinutes] = duration.split(":").map(Number);
-
-      // Calculate the end date by adding the duration
-      const endDate = new Date(startDate);
-      endDate.setHours(endDate.getHours() + durationHours);
-      endDate.setMinutes(endDate.getMinutes() + durationMinutes);
-
-      // Get color based on status
-      const color = getStatusColor(appointment.status);
-
-      return {
-        id: appointment.uuidAppointment,
-        title: `${appointment["Customer.User.fname"]} - ${appointment["Service.name"]}`,
-        start: startDate,
-        end: endDate,
-        extendedProps: { appointment },
-        backgroundColor: color,
-        borderColor: color
-      };
-    });
-
-    setEvents(newEvents);
-  }, [appointments]);
-
-  const handleEventClick = (info: any) => {
-    const { appointment } = info.event.extendedProps;
-    setSelectedAppointment(appointment);
-    setIsDialogOpen(true);
+  const getStatusColor = (status: AppointmentStatus) => {
+    switch (status) {
+      case AppointmentStatus.Scheduled:
+        return "bg-blue-100 text-blue-800";
+      case AppointmentStatus.Completed:
+        return "bg-green-100 text-green-800";
+      case AppointmentStatus.Cancelled:
+        return "bg-red-100 text-red-800";
+      case AppointmentStatus.NoShow:
+        return "bg-yellow-100 text-yellow-800";
+      case AppointmentStatus.InProgress:
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
   };
 
-  const handleDateClick = (info: any) => {
-    toast({
-      title: "Date clicked",
-      description: `You clicked on ${format(info.date, "PPP")}. You can add logic to create a new appointment here.`,
-    });
-  };
-
-  const handleAppointmentUpdate = (updatedAppointment: Appointment) => {
-    setAppointments(appointments.map(appointment =>
-      appointment.idAppointment === updatedAppointment.idAppointment
-        ? updatedAppointment
-        : appointment
-    ));
-    setIsDialogOpen(false);
-
-    toast({
-      title: "Appointment updated",
-      description: `The appointment has been updated successfully.`,
-    });
+  const formatStatus = (status: AppointmentStatus) => {
+    return status.charAt(0) + status.slice(1).toLowerCase().replace('_', ' ');
   };
 
   return (
-    <div className="h-[700px]">
-      <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="timeGridWeek"
-        headerToolbar={{
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay"
-        }}
-        events={events}
-        eventClick={handleEventClick}
-        dateClick={handleDateClick}
-        editable={true}
-        selectable={true}
-        selectMirror={true}
-        dayMaxEvents={true}
-        weekends={true}
-        slotMinTime="08:00:00"
-        slotMaxTime="20:00:00"
-        height="100%"
-      />
+    <div className="flex flex-col md:flex-row gap-6">
+      <div className="w-full md:w-auto">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={(newDate) => newDate && setDate(newDate)}
+          className="rounded-md border"
+        />
+      </div>
+
+      <div className="flex-1">
+        <h3 className="font-medium text-lg mb-4">
+          {format(date, "MMMM d, yyyy")}
+          <span className="ml-1">
+            - {appointmentsForDate.length} Appointments
+          </span>
+        </h3>
+
+        <div className="space-y-3">
+          {appointmentsForDate.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No appointments scheduled for this day
+            </div>
+          ) : (
+            appointmentsForDate.map(appointment => (
+              <Card
+                key={appointment.idAppointment}
+                className="cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => setSelectedAppointment(appointment.idAppointment)}
+              >
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-medium">{appointment.appointmentTime} - {appointment['Customer.User.fname']} {appointment['Customer.User.lname']}</p>
+                      <p className="text-sm text-muted-foreground">{appointment['Service.name']} ({appointment['Service.duration']})</p>
+                    </div>
+                    <Badge className={getStatusColor(appointment.status)}>
+                      {formatStatus(appointment.status)}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+      </div>
 
       {selectedAppointment && (
         <AppointmentDialog
-          appointment={selectedAppointment}
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          onUpdate={handleAppointmentUpdate}
+          appointmentId={selectedAppointment}
+          onClose={() => setSelectedAppointment(null)}
         />
       )}
     </div>
   );
-};
-
-export default AppointmentCalendar;
+}

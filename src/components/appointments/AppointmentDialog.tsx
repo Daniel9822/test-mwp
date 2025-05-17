@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -16,159 +17,137 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Appointment, AppointmentStatus } from "@/types/appointments";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
-import { useState } from "react";
-import { MOCK_SERVICES } from "@/data/mockAppointments";
+import { Appointment, AppointmentStatus } from "@/types/appointments";
+import { MOCK_APPOINTMENTS } from "@/data/mockAppointments";
 
 interface AppointmentDialogProps {
-  appointment: Appointment;
-  isOpen: boolean;
+  appointmentId: number;
   onClose: () => void;
-  onUpdate: (appointment: Appointment) => void;
 }
 
-const AppointmentDialog = ({
-  appointment,
-  isOpen,
+export default function AppointmentDialog({
+  appointmentId,
   onClose,
-  onUpdate,
-}: AppointmentDialogProps) => {
-  const [status, setStatus] = useState<AppointmentStatus>(appointment.status);
-  const [notes, setNotes] = useState(appointment.notes);
+}: AppointmentDialogProps) {
+  const [isOpen, setIsOpen] = useState(true);
+  const [appointment, setAppointment] = useState<Appointment | null>(null);
+  const [status, setStatus] = useState<AppointmentStatus>(
+    AppointmentStatus.Scheduled
+  );
+  const [notes, setNotes] = useState("");
 
-  const handleUpdate = () => {
-    onUpdate({
-      ...appointment,
-      status,
-      notes,
-    });
-  };
-
-  const formatDate = (date: Date) => {
-    return format(date, "PPP");
-  };
-
-  const getStatusBadgeClass = (status: AppointmentStatus) => {
-    switch (status) {
-      case AppointmentStatus.Scheduled:
-        return "bg-blue-100 text-blue-800";
-      case AppointmentStatus.Completed:
-        return "bg-green-100 text-green-800";
-      case AppointmentStatus.Cancelled:
-        return "bg-red-100 text-red-800";
-      case AppointmentStatus.NoShow:
-        return "bg-yellow-100 text-yellow-800";
-      case AppointmentStatus.InProgress:
-        return "bg-purple-100 text-purple-800";
-      default:
-        return "bg-gray-100 text-gray-800";
+  useEffect(() => {
+    // In a real app, this would be an API call
+    const found = MOCK_APPOINTMENTS.find(
+      (a) => a.idAppointment === appointmentId
+    );
+    if (found) {
+      setAppointment(found);
+      setStatus(found.status);
+      setNotes(found.notes);
     }
+  }, [appointmentId]);
+
+  const handleSave = () => {
+    // In a real app, this would be an API call to update the appointment
+    console.log("Saving changes:", { status, notes });
+    handleClose();
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose();
+  };
+
+  if (!appointment) return null;
+
+  const formatStatus = (status: AppointmentStatus) => {
+    return (
+      status.charAt(0) +
+      status.slice(1).toLowerCase().replace("_", " ")
+    );
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Appointment Details</DialogTitle>
-          <DialogDescription>
-            View and edit appointment information
-          </DialogDescription>
+          <DialogDescription>View and manage appointment information</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Client:</span>
-            <span className="col-span-3 text-sm">
+          <div className="grid grid-cols-1 gap-2">
+            <div className="font-medium">Customer</div>
+            <div>
               {appointment["Customer.User.fname"]} {appointment["Customer.User.lname"]}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Email:</span>
-            <span className="col-span-3 text-sm">
+            </div>
+            <div className="text-sm text-muted-foreground">
               {appointment["Customer.User.email"]}
-            </span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Service:</span>
-            <span className="col-span-3 text-sm">
-              {appointment["Service.name"]}
-            </span>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="font-medium">Date</div>
+              <div>{format(new Date(appointment.appointmentDate), "MMMM d, yyyy")}</div>
+            </div>
+            <div>
+              <div className="font-medium">Time</div>
+              <div>{appointment.appointmentTime}</div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Description:</span>
-            <span className="col-span-3 text-sm">
-              {appointment["Service.description"]}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Date:</span>
-            <span className="col-span-3 text-sm">
-              {formatDate(appointment.appointmentDate)}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Time:</span>
-            <span className="col-span-3 text-sm">
-              {appointment.appointmentTime}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Duration:</span>
-            <span className="col-span-3 text-sm">
-              {appointment["Service.duration"]}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Status:</span>
-            <div className="col-span-3">
-              <Select
-                value={status}
-                onValueChange={(value) => setStatus(value as AppointmentStatus)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(AppointmentStatus).map((status) => (
-                    <SelectItem key={status} value={status}>
-                      <span className={`px-2 py-1 text-xs rounded-full ${getStatusBadgeClass(status as AppointmentStatus)}`}>
-                        {status}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div className="grid grid-cols-1 gap-2">
+            <div className="font-medium">Service</div>
+            <div>{appointment["Service.name"]}</div>
+            <div className="text-sm text-muted-foreground">
+              Duration: {appointment["Service.duration"]}
             </div>
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-sm font-medium">Notes:</span>
-            <div className="col-span-3">
-              <textarea
-                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                rows={3}
-              />
-            </div>
+            <Label htmlFor="status" className="text-right">
+              Status
+            </Label>
+            <Select
+              value={status}
+              onValueChange={(val) => setStatus(val as AppointmentStatus)}
+            >
+              <SelectTrigger id="status" className="col-span-3">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(AppointmentStatus).map((statusValue) => (
+                  <SelectItem key={statusValue} value={statusValue}>
+                    {formatStatus(statusValue)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="notes" className="text-right">
+              Notes
+            </Label>
+            <Textarea
+              id="notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className="col-span-3"
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleUpdate}>Save Changes</Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
-};
-
-export default AppointmentDialog;
+}

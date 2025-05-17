@@ -25,8 +25,8 @@ const Sidebar = () => {
       <div className="p-4 flex items-center">
         <Link href="/" className="flex items-center gap-1.5">
           <div className="relative w-8 h-8">
-            <div className="absolute inset-0 bg-blue-500 rounded-full -z-10"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-emerald-500 rounded-full opacity-75"></div>
+            <div className="absolute inset-0 bg-primary rounded-full -z-10"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-secondary rounded-full opacity-75"></div>
           </div>
           <span className="text-lg font-bold">OSEN</span>
         </Link>
@@ -148,6 +148,14 @@ const Sidebar = () => {
               </button>
               {invoiceOpen && (
                 <ul className="pl-8 mt-1 space-y-1">
+                  <li>
+                    <Link
+                      href="/invoice/create"
+                      className={`sidebar-item ${pathname === '/invoice/create' ? 'active' : ''}`}
+                    >
+                      <span>Create Invoice</span>
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       href="/invoice/list"

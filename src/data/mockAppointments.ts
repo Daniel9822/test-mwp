@@ -1,5 +1,5 @@
 import { Appointment, AppointmentStatus, Customer, NotificationPhone, Service } from "@/types/appointments";
-import { addDays, addHours, addMinutes, format, setHours, setMinutes, startOfDay } from "date-fns";
+import { addDays } from "date-fns";
 
 // Generate a random UUID
 const generateUUID = () => {
@@ -24,7 +24,8 @@ export const MOCK_SERVICES: Service[] = [
     name: "Window Tinting",
     description: "Professional window tinting for your vehicle",
     duration: "01:30",
-    price: 149.99
+    price: 149.99,
+    notificationPhones: [1, 3] // IDs de los teléfonos para notificaciones
   },
   {
     idServices: 2,
@@ -32,7 +33,8 @@ export const MOCK_SERVICES: Service[] = [
     name: "Car Detailing",
     description: "Complete interior and exterior detailing",
     duration: "03:00",
-    price: 249.99
+    price: 249.99,
+    notificationPhones: [2]
   },
   {
     idServices: 3,
@@ -40,7 +42,8 @@ export const MOCK_SERVICES: Service[] = [
     name: "Oil Change",
     description: "Standard oil change service",
     duration: "00:45",
-    price: 59.99
+    price: 59.99,
+    notificationPhones: [1]
   },
   {
     idServices: 4,
@@ -48,7 +51,8 @@ export const MOCK_SERVICES: Service[] = [
     name: "Quote Review",
     description: "Consultation for custom service quote",
     duration: "01:00",
-    price: 0
+    price: 0,
+    notificationPhones: [2, 3]
   },
   {
     idServices: 5,
@@ -56,7 +60,8 @@ export const MOCK_SERVICES: Service[] = [
     name: "Tire Rotation",
     description: "Rotate and balance all tires",
     duration: "01:00",
-    price: 79.99
+    price: 79.99,
+    notificationPhones: []
   }
 ];
 
