@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,13 +11,31 @@ import {
   MessageSquare,
   ShoppingCart,
   FileText,
-  ChevronRight
+  ChevronRight,
+  PlusCircle,
+  PackageOpen,
+  ListOrdered,
+  Users,
+  MessageCircle,
+  Tag,
+  Ticket
 } from "lucide-react";
 
 const Sidebar = () => {
   const pathname = usePathname();
   const [ecommerceOpen, setEcommerceOpen] = useState(false);
   const [invoiceOpen, setInvoiceOpen] = useState(false);
+
+  // Verificar si la ruta actual está dentro de la sección de ecommerce o invoice
+  // y abrir el menú correspondiente automáticamente
+  useEffect(() => {
+    if (pathname?.includes('/ecommerce')) {
+      setEcommerceOpen(true);
+    }
+    if (pathname?.includes('/invoice')) {
+      setInvoiceOpen(true);
+    }
+  }, [pathname]);
 
   return (
     <aside className="bg-card w-60 h-full overflow-y-auto border-r border-border flex flex-col">
@@ -83,6 +101,15 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
+                href="/sms"
+                className={`sidebar-item ${pathname === '/sms' ? 'active' : ''}`}
+              >
+                <MessageCircle size={18} />
+                <span>SMS</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/chat"
                 className={`sidebar-item ${pathname === '/chat' ? 'active' : ''}`}
               >
@@ -93,6 +120,7 @@ const Sidebar = () => {
             <li>
               <button
                 onClick={() => setEcommerceOpen(!ecommerceOpen)}
+                type="button"
                 className="sidebar-item w-full flex justify-between"
               >
                 <div className="flex items-center gap-3">
@@ -116,10 +144,34 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <Link
+                      href="/ecommerce/products/add"
+                      className={`sidebar-item ${pathname === '/ecommerce/products/add' ? 'active' : ''}`}
+                    >
+                      <span>Add Product</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/ecommerce/categories"
+                      className={`sidebar-item ${pathname === '/ecommerce/categories' ? 'active' : ''}`}
+                    >
+                      <span>Categories</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       href="/ecommerce/orders"
                       className={`sidebar-item ${pathname === '/ecommerce/orders' ? 'active' : ''}`}
                     >
                       <span>Orders</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/ecommerce/customers"
+                      className={`sidebar-item ${pathname === '/ecommerce/customers' ? 'active' : ''}`}
+                    >
+                      <span>Customers</span>
                     </Link>
                   </li>
                 </ul>
@@ -135,6 +187,7 @@ const Sidebar = () => {
             <li>
               <button
                 onClick={() => setInvoiceOpen(!invoiceOpen)}
+                type="button"
                 className="sidebar-item w-full flex justify-between"
               >
                 <div className="flex items-center gap-3">
@@ -174,6 +227,15 @@ const Sidebar = () => {
                   </li>
                 </ul>
               )}
+            </li>
+            <li>
+              <Link
+                href="/coupons"
+                className={`sidebar-item ${pathname === '/coupons' ? 'active' : ''}`}
+              >
+                <Ticket size={18} />
+                <span>Coupons</span>
+              </Link>
             </li>
           </ul>
         </div>

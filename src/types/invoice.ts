@@ -21,7 +21,7 @@ export interface InvoiceDiscount {
   value: number;
 }
 
-export type PaymentMethod = "cash" | "card" | "split";
+export type PaymentMethod = "cash" | "card" | "bank" | "other" | "split";
 
 export interface PaymentDetails {
   method: PaymentMethod;
@@ -30,8 +30,16 @@ export interface PaymentDetails {
   cashAmount?: number;
 }
 
+export interface Payment {
+  id: string;
+  amount: number;
+  date: Date;
+  method: PaymentMethod;
+  reference?: string;
+}
+
 export interface Invoice {
-  id?: string;
+  id: string;
   invoiceNumber?: string;
   customer: CustomerInfo;
   items: InvoiceItem[];
@@ -49,4 +57,5 @@ export interface Invoice {
   showInJobList: boolean;
   paymentDetails: PaymentDetails;
   status: "draft" | "estimate" | "processed";
+  payments?: Payment[];
 }
