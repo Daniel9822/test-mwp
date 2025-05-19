@@ -38,15 +38,19 @@ const Sidebar = () => {
   }, [pathname]);
 
   return (
-    <aside className="bg-card w-60 h-full overflow-y-auto border-r border-border flex flex-col">
+    <aside className="w-60 h-full overflow-y-auto border-r border-white/10 flex flex-col bg-gradient-to-br from-[hsl(var(--sidebar-bg))] to-[hsl(var(--sidebar-bg)_/_0.9)] relative">
+      {/* Efectos decorativos */}
+      <div className="absolute top-0 right-0 w-full h-64 bg-[hsl(var(--sidebar-accent))] opacity-10 blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-3/4 h-64 bg-[hsl(var(--primary))] opacity-10 blur-[100px] pointer-events-none"></div>
+
       {/* Logo */}
-      <div className="p-4 flex items-center">
-        <Link href="/" className="flex items-center gap-1.5">
+      <div className="p-4 flex items-center relative">
+        <Link href="/" className="flex items-center gap-1.5 z-10">
           <div className="relative w-8 h-8">
-            <div className="absolute inset-0 bg-primary rounded-full -z-10"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-secondary rounded-full opacity-75"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-full -z-10"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 bg-white/20 backdrop-blur-md rounded-full"></div>
           </div>
-          <span className="text-lg font-bold">OSEN</span>
+          <span className="text-lg font-bold text-white">MWP</span>
         </Link>
       </div>
 

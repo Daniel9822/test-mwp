@@ -1,12 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import AppointmentCalendar from "@/components/appointments/AppointmentCalendar";
-import ServicesManager from "@/components/appointments/ServicesManager";
-import NotificationSettings from "@/components/appointments/NotificationSettings";
-import AppointmentsList from "@/components/appointments/AppointmentsList";
+import AppointmentCalendar from "@/components/admin/appointments/AppointmentCalendar";
+import ServicesManager from "@/components/admin/appointments/ServicesManager";
+import NotificationSettings from "@/components/admin/appointments/NotificationSettings";
+import AppointmentsList from "@/components/admin/appointments/AppointmentsList";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
-import CreateAppointmentDialog from "@/components/appointments/CreateAppointmentDialog";
+import CreateAppointmentDialog from "@/components/admin/appointments/CreateAppointmentDialog";
 
 export default function AppointmentsPage() {
   return (
@@ -16,7 +16,7 @@ export default function AppointmentsPage() {
         <div>
           <h1 className="text-2xl font-medium">Appointments</h1>
           <div className="flex items-center gap-2 text-sm mt-1">
-            <span className="text-muted-foreground">Osen</span>
+            <span className="text-muted-foreground">MWP</span>
             <span className="text-muted-foreground">&gt;</span>
             <span>Appointments</span>
           </div>
@@ -73,10 +73,10 @@ export default function AppointmentsPage() {
                   Manage appointment services
                 </CardDescription>
               </div>
-              <Button size="sm" className="flex items-center gap-2">
+              {/* <Button size="sm" className="flex items-center gap-2">
                 <PlusCircle className="h-4 w-4" />
                 <span>Add Service</span>
-              </Button>
+              </Button> */}
             </CardHeader>
             <CardContent>
               <ServicesManager />

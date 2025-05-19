@@ -26,7 +26,7 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <nav className="h-16 border-b border-border bg-card flex items-center justify-between px-4">
+    <nav className="h-16 border-b border-border bg-card flex items-center justify-between px-4 bg-gradient-to-br from-[hsl(var(--sidebar-bg))] to-[hsl(var(--sidebar-bg)_/_0.9)]">
       {/* Left side - Search Bar */}
       <div className="flex items-center gap-2 w-1/3">
         {searchOpen ? (
@@ -51,11 +51,11 @@ const Navbar = () => {
           </Button>
         )}
 
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
+        {/* <Button variant="ghost" size="icon" className="text-muted-foreground">
           <span className="font-mono text-sm">⌘K</span>
-        </Button>
+        </Button> */}
 
-        <div className="ml-6 relative">
+        {/* <div className="ml-6 relative">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -72,12 +72,12 @@ const Navbar = () => {
               <DropdownMenuItem>UI Components</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </div> */}
       </div>
 
       {/* Right side - User Profile, etc. */}
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
+        {/* <Button variant="ghost" size="icon" className="text-muted-foreground">
           <div className="w-5 h-5 relative">
             <img
               src="https://cdn.jsdelivr.net/npm/flag-icon-css@3.5.0/flags/4x3/us.svg"
@@ -85,15 +85,15 @@ const Navbar = () => {
               className="object-cover w-full h-full rounded"
             />
           </div>
-        </Button>
+        </Button> */}
 
         <Button variant="ghost" size="icon" className="text-muted-foreground">
           <Bell size={20} />
         </Button>
 
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
+        {/* <Button variant="ghost" size="icon" className="text-muted-foreground">
           <Grid size={20} />
-        </Button>
+        </Button> */}
 
         <Button variant="ghost" size="icon" className="text-muted-foreground">
           <Settings size={20} />
@@ -123,7 +123,7 @@ const Navbar = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            {/* <DropdownMenuItem>Subscription</DropdownMenuItem> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem>Log Out</DropdownMenuItem>
           </DropdownMenuContent>

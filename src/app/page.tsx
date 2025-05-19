@@ -21,12 +21,12 @@ import {
   ExternalLink
 } from "lucide-react";
 
-import StatsCards from "@/components/dashboard/StatsCards";
-import DashboardChart from "@/components/dashboard/DashboardChart";
-import TrafficSources from "@/components/dashboard/TrafficSources";
-import RecentOrders from "@/components/dashboard/RecentOrders";
-import TaxCard from "@/components/dashboard/TaxCard";
-import HelpLineCard from "@/components/dashboard/HelpLineCard";
+import StatsCards from "@/components/admin/dashboard/StatsCards";
+import DashboardChart from "@/components/admin/dashboard/DashboardChart";
+import TrafficSources from "@/components/admin/dashboard/TrafficSources";
+import RecentOrders from "@/components/admin/dashboard/RecentOrders";
+import TaxCard from "@/components/admin/dashboard/TaxCard";
+import HelpLineCard from "@/components/admin/dashboard/HelpLineCard";
 
 export default function Home() {
   return (

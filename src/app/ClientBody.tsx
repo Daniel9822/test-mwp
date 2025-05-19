@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Sidebar from "@/components/dashboard/Sidebar";
-import Navbar from "@/components/dashboard/Navbar";
+import Sidebar from "@/components/admin/dashboard/Sidebar";
+import Navbar from "@/components/admin/dashboard/Navbar";
 
 export default function ClientBody({
   children,

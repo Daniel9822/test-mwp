@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Osen Dashboard Clone",
-  description: "A clone of the Osen Dashboard template",
+  title: "MWP Dashboard",
+  description: "the MWP Dashboard",
 };
 
 export default function RootLayout({

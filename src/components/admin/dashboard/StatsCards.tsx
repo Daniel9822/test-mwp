@@ -7,10 +7,10 @@ const StatsCards = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {/* Total Orders Card */}
-      <Card>
+      <Card className="overflow-hidden glass-effect">
         <CardContent className="p-0">
-          <div className="stat-card">
-            <div className="stat-card-icon bg-blue-500">
+          <div className="stat-card group">
+            <div className="stat-card-icon bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/30 transition-all">
               <Package size={20} />
             </div>
             <div>
@@ -29,10 +29,10 @@ const StatsCards = () => {
       </Card>
 
       {/* Total Returns Card */}
-      <Card>
+      <Card className="overflow-hidden glass-effect">
         <CardContent className="p-0">
-          <div className="stat-card">
-            <div className="stat-card-icon bg-indigo-500">
+          <div className="stat-card group">
+            <div className="stat-card-icon bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/30 transition-all">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -66,10 +66,10 @@ const StatsCards = () => {
       </Card>
 
       {/* Average Sales Earnings Card */}
-      <Card>
+      <Card className="overflow-hidden glass-effect">
         <CardContent className="p-0">
-          <div className="stat-card">
-            <div className="stat-card-icon bg-emerald-500">
+          <div className="stat-card group">
+            <div className="stat-card-icon bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/30 transition-all">
               <DollarSign size={20} />
             </div>
             <div>
@@ -91,10 +91,10 @@ const StatsCards = () => {
       </Card>
 
       {/* Number of Visits Card */}
-      <Card>
+      <Card className="overflow-hidden glass-effect">
         <CardContent className="p-0">
-          <div className="stat-card">
-            <div className="stat-card-icon bg-purple-500">
+          <div className="stat-card group">
+            <div className="stat-card-icon bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/30 transition-all">
               <Users size={20} />
             </div>
             <div>

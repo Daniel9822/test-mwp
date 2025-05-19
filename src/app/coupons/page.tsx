@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { mockCoupons } from "@/data/mockCoupons";
 import { Coupon } from "@/types/coupon";
-import CouponList from "@/components/coupons/CouponList";
+import CouponList from "@/components/admin/coupons/CouponList";
 import { Plus, Search, Tag, Ticket, RefreshCw, AlertCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import CouponForm from "@/components/coupons/CouponForm";
+import CouponForm from "@/components/admin/coupons/CouponForm";
 import { Badge } from "@/components/ui/badge";
 
 export default function CouponsPage() {

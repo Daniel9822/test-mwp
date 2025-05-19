@@ -62,7 +62,8 @@ export const mockProducts: ProductsInterface[] = [
     imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZHVjdHN8ZW58MHx8MHx8fDA%3D",
     uuidCategory: "cat-001",
     uuidTag: ["premium", "audio", "wireless"],
-    options: ["Black", "White", "Blue"]
+    options: ["Black", "White", "Blue"],
+    qty: 2
   },
   {
     idProduct: 2,
@@ -85,7 +86,8 @@ export const mockProducts: ProductsInterface[] = [
     imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2R1Y3RzfGVufDB8fDB8fHww",
     uuidCategory: "cat-001",
     uuidTag: ["smart", "wearable", "tech"],
-    options: ["Black", "Silver", "Gold"]
+    options: ["Black", "Silver", "Gold"],
+    qty: 1
   },
   {
     idProduct: 3,
@@ -108,7 +110,8 @@ export const mockProducts: ProductsInterface[] = [
     imageUrl: "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRzaGlydHxlbnwwfHwwfHx8MA%3D%3D",
     uuidCategory: "cat-002",
     uuidTag: ["fashion", "clothing", "designer"],
-    options: ["White", "Black", "Gray", "Navy"]
+    options: ["White", "Black", "Gray", "Navy"],
+    qty: 3
   },
   {
     idProduct: 4,
@@ -128,7 +131,8 @@ export const mockProducts: ProductsInterface[] = [
     imageUrl: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZnVybml0dXJlfGVufDB8fDB8fHww",
     uuidCategory: "cat-003",
     uuidTag: ["furniture", "home", "modern"],
-    options: ["Oak", "Walnut", "White"]
+    options: ["Oak", "Walnut", "White"],
+    qty: 3
   },
   {
     idProduct: 5,
@@ -148,7 +152,8 @@ export const mockProducts: ProductsInterface[] = [
     imageUrl: "https://images.unsplash.com/photo-1518339235722-69b91a679621?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YmFza2V0YmFsbHxlbnwwfHwwfHx8MA%3D%3D",
     uuidCategory: "cat-004",
     uuidTag: ["sports", "basketball", "outdoor"],
-    options: ["Orange", "Black"]
+    options: ["Orange", "Black"],
+    qty: 4
   },
   {
     idProduct: 6,
@@ -171,7 +176,8 @@ export const mockProducts: ProductsInterface[] = [
     imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGJvb2t8ZW58MHx8MHx8fDA%3D",
     uuidCategory: "cat-005",
     uuidTag: ["books", "fiction", "bestseller"],
-    options: ["English", "Spanish"]
+    options: ["English", "Spanish"],
+    qty: 3
   }
 ];
 

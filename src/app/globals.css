@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 220 25% 97%;     /* Fondo más cálido con un toque de azul */
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -20,7 +20,7 @@
     --accent-foreground: 240 10% 3.9%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 90%;
+    --border: 225 10% 90%;         /* Borde con toque de color */
     --input: 240 6% 90%;
     --ring: 262 83% 58%;
     --radius: 0.75rem;             /* Bordes más redondeados para un look más elegante */
@@ -32,27 +32,31 @@
     --positive: 142 76% 45%;
     --negative: 0 84% 60%;
     --success: 142 76% 45%;      /* Color para éxito/positivo */
+
+    /* Nuevos colores para gradientes y efectos */
+    --sidebar-bg: 260 30% 15%;    /* Color base del sidebar */
+    --sidebar-accent: 255 70% 60%; /* Acento para efectos en el sidebar */
   }
 
   .dark {
-    --background: 240 10% 8%;
+    --background: 240 15% 8%;      /* Más oscuro y con toque de color */
     --foreground: 0 0% 98%;
-    --card: 240 10% 12%;
+    --card: 240 13% 14%;           /* Más oscuro y distinguible */
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 12%;
+    --popover: 240 13% 14%;
     --popover-foreground: 0 0% 98%;
     --primary: 262 83% 68%;        /* Púrpura más brillante en dark mode */
     --primary-foreground: 0 0% 12%;
     --secondary: 186 83% 55%;      /* Turquesa más brillante en dark mode */
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 8% 18%;
+    --muted: 240 10% 19%;          /* Más distinguible */
     --muted-foreground: 240 5% 80%;
     --accent: 330 81% 70%;         /* Rosa más brillante en dark mode */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84% 65%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 8% 18%;
-    --input: 240 8% 18%;
+    --border: 240 13% 20%;         /* Más visible */
+    --input: 240 10% 20%;
     --ring: 262 83% 68%;
     --chart-1: 262 83% 68%;
     --chart-2: 186 83% 55%;
@@ -61,7 +65,11 @@
     --chart-5: 152 76% 54%;
     --positive: 142 76% 55%;
     --negative: 0 84% 65%;
-    --success: 142 76% 55%;      /* Color para éxito/positivo */
+    --success: 142 76% 55%;
+
+    /* Nuevos colores para gradientes y efectos en dark mode */
+    --sidebar-bg: 260 30% 10%;
+    --sidebar-accent: 255 70% 50%;
   }
 }
 
@@ -71,24 +79,29 @@
   }
   body {
     @apply bg-background text-foreground dark;
+    background-image:
+      radial-gradient(at 50% 0%, rgba(var(--secondary-rgb)/0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(var(--primary-rgb)/0.08) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 }
 
 @layer components {
   .sidebar-item {
-    @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground rounded-md transition-colors;
+    @apply flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:bg-white/10 hover:text-white rounded-md transition-colors;
   }
 
   .sidebar-item.active {
-    @apply bg-primary/10 text-primary;
+    @apply bg-white/15 text-white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
   }
 
   .sidebar-category {
-    @apply px-4 py-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider;
+    @apply px-4 py-2 text-xs font-semibold uppercase text-white/50 tracking-wider;
   }
 
   .stat-card {
-    @apply flex items-start gap-4 p-6 rounded-xl shadow-sm border border-border/50;
+    @apply flex items-start gap-4 p-6 rounded-xl shadow-sm border border-border/50 bg-card/80 backdrop-blur-sm;
   }
 
   .stat-card-icon {
@@ -106,4 +119,66 @@
   .text-success {
     color: hsl(var(--success));
   }
+
+  /* Nuevos componentes */
+  .glass-effect {
+    @apply bg-card/80 backdrop-blur-sm border border-white/20;
+  }
+
+  .gradient-border {
+    position: relative;
+    z-index: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .gradient-border:before {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    left: -50%;
+    top: -50%;
+    width: 200%;
+    height: 200%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 50% 50%, 50% 50%;
+    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+    background-image: linear-gradient(hsl(var(--primary)), hsl(var(--primary))),
+                      linear-gradient(hsl(var(--secondary)), hsl(var(--secondary))),
+                      linear-gradient(hsl(var(--accent)), hsl(var(--accent))),
+                      linear-gradient(hsl(var(--primary)), hsl(var(--primary)));
+    animation: rotate 4s linear infinite;
+  }
+
+  .gradient-border:after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 2px;
+    top: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    background: hsl(var(--card));
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(1turn);
+    }
+  }
+}
+
+/* Variables RGB para usar en rgba() */
+:root {
+  --primary-rgb: 150, 50, 220;
+  --secondary-rgb: 30, 175, 205;
+  --accent-rgb: 225, 50, 130;
+}
+
+.dark {
+  --primary-rgb: 170, 80, 230;
+  --secondary-rgb: 50, 195, 225;
+  --accent-rgb: 240, 80, 160;
 }

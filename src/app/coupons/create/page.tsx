@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import CouponForm from "@/components/coupons/CouponForm";
+import CouponForm from "@/components/admin/coupons/CouponForm";
 import { CouponFormData } from "@/types/coupon";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";

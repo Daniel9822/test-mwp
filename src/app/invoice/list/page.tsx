@@ -32,7 +32,7 @@ import { Invoice, Payment } from "@/types/invoice";
 import {
   Plus,
   FileText,
-  FilePdf,
+  File,
   MoreVertical,
   CreditCard,
   Clock,
@@ -251,7 +251,7 @@ export default function InvoiceListPage() {
                         </DropdownMenuItem>
 
                         <DropdownMenuItem onClick={() => handleGeneratePdf(invoice.id)}>
-                          <FilePdf className="h-4 w-4 mr-2" />
+                          <File className="h-4 w-4 mr-2" />
                           Generate PDF
                         </DropdownMenuItem>
 

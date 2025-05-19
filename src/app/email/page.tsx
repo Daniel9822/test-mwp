@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { mockUsers, mockEmails } from "@/data/mockUsersData";
-import EmailComposer from "@/components/email/EmailComposer";
-import EmailHistory from "@/components/email/EmailHistory";
+import EmailComposer from "@/components/admin/email/EmailComposer";
+import EmailHistory from "@/components/admin/email/EmailHistory";
 import { EmailMessage } from "@/types/users";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";

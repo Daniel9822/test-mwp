@@ -105,7 +105,7 @@ export default function InvoiceDetailsPage() {
             </div>
 
             <div className="text-right">
-              <h2 className="text-xl font-semibold">OSEN</h2>
+              <h2 className="text-xl font-semibold">MPW</h2>
               <p>123 Business Street</p>
               <p>City, State 12345</p>
               <p>contact@example.com</p>
@@ -282,7 +282,7 @@ const mockInvoices: Invoice[] = [
   },
   {
     id: "inv-003",
-    invoiceNumber: null,
+    invoiceNumber: '',
     customer: {
       name: "Robert Johnson",
       phone: "555-456-7890"

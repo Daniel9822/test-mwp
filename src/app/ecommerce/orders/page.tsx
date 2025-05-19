@@ -66,7 +66,7 @@ import {
 
 export default function OrdersPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string >('');
   const [sortBy, setSortBy] = useState<"date" | "amount">("date");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [selectedOrder, setSelectedOrder] = useState<OrderInterface | null>(null);
@@ -175,14 +175,14 @@ export default function OrdersPage() {
 
         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
           <Select
-            value={statusFilter || ""}
-            onValueChange={(value) => setStatusFilter(value || null)}
+            value={statusFilter}
+            onValueChange={(value) => setStatusFilter(value)}
           >
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Statuses</SelectItem>
+              {/* <SelectItem value="">All Statuses</SelectItem> */}
               <SelectItem value="Pending">Pending</SelectItem>
               <SelectItem value="Processing">Processing</SelectItem>
               <SelectItem value="Shipped">Shipped</SelectItem>

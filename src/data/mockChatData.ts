@@ -29,7 +29,7 @@ export const mockChatUsers: ChatUser[] = mockCustomers.map(customer => ({
 export const adminUser: ChatUser = {
   id: "admin-001",
   name: "Admin",
-  email: "admin@osen.com",
+  email: "admin@MWP.com",
   avatar: generateAvatarUrl("Admin User"),
   status: {
     online: true,
@@ -108,5 +108,6 @@ export const mockChatConversations: ChatConversation[] = mockChatUsers.map(user 
 // Función para obtener mensajes de una conversación
 export const getConversationMessages = (conversationId: string): ChatMessage[] => {
   const conversation = mockChatConversations.find(conv => conv.id === conversationId);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return conversation ? (conversation as any).messages || [] : [];
 };

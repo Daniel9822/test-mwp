@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { mockUsers, mockSms } from "@/data/mockUsersData";
-import SmsComposer from "@/components/sms/SmsComposer";
-import SmsHistory from "@/components/sms/SmsHistory";
+import SmsComposer from "@/components/admin/sms/SmsComposer";
+import SmsHistory from "@/components/admin/sms/SmsHistory";
 import { SmsMessage } from "@/types/users";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
