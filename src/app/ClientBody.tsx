@@ -16,20 +16,21 @@ export default function ClientBody({
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar />
+    <>
+     
+      <div className="flex h-screen overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar />
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
-        {/* Top Navigation Bar */}
-        <Navbar />
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto">
+          {/* Top Navigation Bar */}
+          <Navbar />
 
-        {/* Page Content */}
-        <main className="p-4">
-          {children}
-        </main>
+          {/* Page Content */}
+          <main className="p-4">{children}</main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
